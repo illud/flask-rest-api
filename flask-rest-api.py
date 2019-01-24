@@ -1,8 +1,10 @@
 #https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
+#https://ernestocrespo13.wordpress.com/2016/09/27/consulta-a-mongodb-desde-flask-parte-1/
+#http://blog.crespo.org.ve/2016/09/crud-usando-flask-y-mongodb-con-orm.html
 from flask import Flask, jsonify
 from pymongo import MongoClient
 import pprint
-import json
+from bson.json_util import dumps
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['users']
@@ -27,13 +29,16 @@ tasks = [
     }
 ]
 
+#jsonify({'tasks': tasks})
+
 @app.route("/")
 def hello():
     return "<h1>Hello World!</h1>"
 
-@app.route("/main")
+@app.route("/main",methods=['GET'])
 def main():
-    return jsonify({'tasks': tasks})
+    resultados = collection.find()
+    return dumps(resultados)
  
 if __name__ == "__main__":
     app.run()
