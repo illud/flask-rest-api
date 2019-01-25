@@ -46,5 +46,10 @@ def imse():
     collection.insert_one(request.json)
     return "Inserted"
 
+@app.route("/del", methods=["POST"])
+def dell():
+    collection.delete_one(request.json)
+    return "Deleted"
+
 if __name__ == "__main__":
     app.run()
