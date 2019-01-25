@@ -1,10 +1,12 @@
 #https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
 #https://ernestocrespo13.wordpress.com/2016/09/27/consulta-a-mongodb-desde-flask-parte-1/
 #http://blog.crespo.org.ve/2016/09/crud-usando-flask-y-mongodb-con-orm.html
+#https://stackoverflow.com/questions/20001229/how-to-get-posted-json-in-flask
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 import pprint
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['users']
@@ -37,7 +39,7 @@ def hello():
 
 @app.route("/main",methods=['GET'])
 def main():
-    resultados = collection.find()
+    resultados = collection.find({})
     return dumps(resultados)
  
 @app.route("/insert", methods=['POST'])
@@ -48,8 +50,10 @@ def imse():
 
 @app.route("/del", methods=["POST"])
 def dell():
-    collection.delete_one(request.json)
+    content = request.json
+    print (content['_id'])
+    collection.delete_one({"_id": ObjectId(content['_id'])})
     return "Deleted"
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug= True)
