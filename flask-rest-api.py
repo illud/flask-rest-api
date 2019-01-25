@@ -1,7 +1,7 @@
 #https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
 #https://ernestocrespo13.wordpress.com/2016/09/27/consulta-a-mongodb-desde-flask-parte-1/
 #http://blog.crespo.org.ve/2016/09/crud-usando-flask-y-mongodb-con-orm.html
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from pymongo import MongoClient
 import pprint
 from bson.json_util import dumps
@@ -40,5 +40,11 @@ def main():
     resultados = collection.find()
     return dumps(resultados)
  
+@app.route("/insert", methods=['POST'])
+def imse():
+    data = {"user": "dragon", "password": "satan"}
+    collection.insert_one(request.json)
+    return "Inserted"
+
 if __name__ == "__main__":
     app.run()
